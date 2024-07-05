@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hodlinfo</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>HODLINFO</h1>
+        <select class="select" id="currency-select">
+          <option value="INR">INR</option>
+        </select>
+        <select class="select" id="crypto-select">
+          <option value="BTC">BTC</option>
+          <option value="ETH">ETH</option>
+          <option value="USDT">USDT</option>
+          <option value="XRP">XRP</option>
+          <option value="TRX">TRX</option>
+          <option value="DASH">DASH</option>
+          <option value="ZEC">ZEC</option>
+          <option value="XEM">XEM</option>
+        </select>
+        <button
+          onclick="redirectToPage()"
+          class="button"
+          id="button-1"
+        ></button>
+        <div class="timer-container">
+          <div class="circle"></div>
+          <div class="circle fix"></div>
+          <div class="timer" id="timer">60</div>
+        </div>
+        <button onclick="telegram()" class="telegram">Connect Telegram</button>
+      </header>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Platform</th>
+              <th>Last Traded Price</th>
+              <th>Buy / Sell</th>
+              <th>Difference</th>
+              <th>Savings (%)</th>
+            </tr>
+          </thead>
+          <tbody id="ticker-table">
+            <!-- Data will be inserted here by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <script>
+      function telegram(){
+        window.location.href='https://hodlinfo.com/connect/telegram';
+      }
+      function redirectToPage() {
+            window.location.href = 'https://wazirx.com/signup';
+        }
+        let b=document.getElementById("button-1")
+        b.textContent="Buy BTC"
+        const timerElement = document.getElementById('timer');
+        const circleElement = document.querySelector('.circle');
+        let timeLeft = 60;
+        function startTimer() {
+            timeLeft = 60;
+            timerElement.textContent = timeLeft;
+            circleElement.style.transform = 'rotate(0deg)';
+
+            const interval = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+                const rotateDegree = (360 / 60) * (60 - timeLeft);
+                circleElement.style.transform = `rotate(${rotateDegree}deg)`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    startTimer();
+                }
+            }, 1000);
+        }
+
+        startTimer();
+
+      document.addEventListener('DOMContentLoaded', () => {
+          fetchTickers();
+
+          const cryptoSelect = document.getElementById('crypto-select');
+          cryptoSelect.addEventListener('change', fetchTickers);
+      });
+
+      async function fetchTickers() {
+          const cryptoSelect = document.getElementById('crypto-select');
+          const selectedCrypto = cryptoSelect.value;
+          b.textContent=selectedCrypto
+
+          try {
+              const response = await fetch(`/api/tickers?base_unit=${selectedCrypto}`);
+              const tickers = await response.json();
+
+              const tableBody = document.getElementById('ticker-table');
+              tableBody.innerHTML = '';
+
+              tickers.forEach(ticker => {
+                  const row = document.createElement('tr');
+                  row.innerHTML = `
+                      <td>WaizirX</td>
+                      <td>${ticker.last}</td>
+                      <td>${ticker.buy} / ${ticker.sell}</td>
+                      <td>${ticker.difference}</td>
+                      <td>${ticker.savings}</td>
+                  `;
+                  tableBody.appendChild(row);
+              });
+          } catch (err) {
+              console.error('Error fetching tickers:', err);
+          }
+      }
+    </script>
+  </body>
+</html>

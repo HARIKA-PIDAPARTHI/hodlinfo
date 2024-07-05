@@ -1,0 +1,30 @@
+GET https://harikau8aqonjscprhnky.drops.nxtwave.tech/todos/?status="TO DO"
+
+GET https://harikau8aqonjscprhnky.drops.nxtwave.tech/todos/2/
+
+POST https://harikau8aqonjscprhnky.drops.nxtwave.tech/todos/
+Content-Type:application/json
+
+{
+  "id": 10,
+  "todo": "Finalize event theme",
+  "priority": "LOW",
+  "status": "TO DO"
+}
+
+PUT https://harikau8aqonjscprhnky.drops.nxtwave.tech/todos/2/
+Content-Type:application/json
+
+{ "status": "DONE" }
+
+PUT https://harikau8aqonjscprhnky.drops.nxtwave.tech/todos/2/
+Content-Type:application/json
+
+{ "priority": "HIGH" }
+
+PUT https://harikau8aqonjscprhnky.drops.nxtwave.tech/todos/2/
+Content-Type:application/json
+
+{ "todo": "Some task" }
+
+DELETE https://harikau8aqonjscprhnky.drops.nxtwave.tech/todos/1/
